@@ -37,8 +37,6 @@ let currentSessionMaps = {
   blitz: [],
   ctf: []
 };
-const APP_TIME_ZONE = "Asia/Dubai";
-const APP_TIME_ZONE_LABEL = "GST";
 const API_TIMEOUT_MS = 30000;
 
 function normalizeSkillValue(value){
@@ -1733,7 +1731,7 @@ row.innerHTML = `
   <td>
     <span class="historyDateCellContent">
       <span class="expandIcon">▶</span>
-      <span class="historyDateText">${match.selectedAtDisplay || formatDate(match.selectedAt)}</span>
+      <span class="historyDateText">${formatDate(match.selectedAt)}</span>
     </span>
   </td>
   <td>${match.MID ? "MID_" + String(match.MID).replace("MID_","").padStart(4,"0") : "----"}</td>
@@ -1913,8 +1911,7 @@ function formatDate(date){
 
   if(Number.isNaN(d.getTime())) return "";
 
-  const dateText = new Intl.DateTimeFormat("en-US", {
-    timeZone: APP_TIME_ZONE,
+  return new Intl.DateTimeFormat("en-US", {
     month: "numeric",
     day: "numeric",
     year: "numeric",
@@ -1923,8 +1920,6 @@ function formatDate(date){
     second: "2-digit",
     hour12: true
   }).format(d);
-
-  return `${dateText} ${APP_TIME_ZONE_LABEL}`;
 
 }
 
