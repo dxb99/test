@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbwKZSJIT8DHs9nRw_DyK5pRSqXFY4TICwlyJ-yn8KzZCIVAywQmkz2dsE2IftaaMX0_/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzozBYQ-jcCf0zoJTo5RMoL4fTl3_IkJKTKMdnjML2IrzPTkXN8oEt1KRbgFTEEpLwCSw/exec";
 
 let allPlayers = [];
 let adminLoaded = false;
