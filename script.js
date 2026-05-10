@@ -1822,6 +1822,8 @@ ${match.blueTeam
         </span>
       </div>
 
+      ${renderHistorySessionMaps(match)}
+
     </div>
 
   </td>
@@ -1847,6 +1849,50 @@ row.onclick = () => {
   tbody.appendChild(detailRow);
 
 });
+}
+
+function renderHistorySessionMaps(match){
+
+  const sections = [
+    {
+      label: "Elimination",
+      className: "eliminationHeader",
+      maps: match.playedElimination
+    },
+    {
+      label: "Blitz",
+      className: "blitzHeader",
+      maps: match.playedBlitz
+    },
+    {
+      label: "CTF",
+      className: "ctfHeader",
+      maps: match.playedCtf
+    }
+  ].filter(section => section.maps);
+
+  if(!sections.length){
+    return "";
+  }
+
+  return `
+    <div class="historySessionMaps">
+      <div class="historySessionTitle">SESSION MAPS PLAYED</div>
+      <div class="historySessionGrid">
+        ${sections.map(section => `
+          <div class="historySessionSection">
+            <div class="historySessionHeader ${section.className}">${section.label}</div>
+            <div class="historySessionList">
+              ${section.maps.split(",").map(mapName => `
+                <div class="historySessionMap">${mapName.trim()}</div>
+              `).join("")}
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+
 }
 
 function setupHistorySorting(){
