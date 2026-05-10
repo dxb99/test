@@ -3545,10 +3545,49 @@ margin-top:180px;
 
   .historySessionGrid{
     grid-template-columns:1fr;
+    gap:5px;
   }
 
   .historySessionTitle{
     font-size:11px;
+    margin-bottom:6px;
+  }
+
+  .historySessionMaps{
+    margin-top:10px;
+    padding-top:10px;
+  }
+
+  .historySessionSection{
+    display:grid;
+    grid-template-columns:72px minmax(0,1fr);
+    align-items:stretch;
+    border-radius:7px;
+  }
+
+  .historySessionHeader{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:5px 4px;
+    font-size:10px;
+  }
+
+  .historySessionList{
+    flex-direction:row;
+    flex-wrap:wrap;
+    gap:4px;
+    padding:4px;
+  }
+
+  .historySessionMap{
+    border-top:none;
+    border-radius:6px;
+    background:rgba(255,255,255,0.05);
+    padding:3px 5px;
+    font-size:10px;
+    line-height:1.15;
+    text-align:left;
   }
 
   .tabs{
