@@ -3544,8 +3544,8 @@ margin-top:180px;
   }
 
   .historySessionGrid{
-    grid-template-columns:1fr;
-    gap:5px;
+    grid-template-columns:repeat(3, minmax(0,1fr));
+    gap:4px;
   }
 
   .historySessionTitle{
@@ -3559,35 +3559,28 @@ margin-top:180px;
   }
 
   .historySessionSection{
-    display:grid;
-    grid-template-columns:72px minmax(0,1fr);
-    align-items:stretch;
     border-radius:7px;
   }
 
   .historySessionHeader{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:5px 4px;
-    font-size:10px;
+    padding:5px 3px;
+    font-size:9px;
   }
 
   .historySessionList{
-    flex-direction:row;
-    flex-wrap:wrap;
-    gap:4px;
-    padding:4px;
+    flex-direction:column;
+    gap:0;
+    padding:0;
   }
 
   .historySessionMap{
-    border-top:none;
-    border-radius:6px;
-    background:rgba(255,255,255,0.05);
-    padding:3px 5px;
+    border-top:1px solid rgba(255,255,255,0.07);
+    border-radius:0;
+    background:transparent;
+    padding:4px 3px;
     font-size:10px;
     line-height:1.15;
-    text-align:left;
+    text-align:center;
   }
 
   .tabs{
