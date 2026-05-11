@@ -36,23 +36,27 @@ let sessionProgressDraftMaps = null;
 let sessionProgressSkippedMaps = {
   elimination: [],
   blitz: [],
-  ctf: []
+  ctf: [],
+  bonus: []
 };
 let sessionMapsNeedSelection = false;
 let customSessionData = {
   elimination: [],
   blitz: [],
-  ctf: []
+  ctf: [],
+  bonus: []
 };
 let currentSessionMaps = {
   elimination: [],
   blitz: [],
-  ctf: []
+  ctf: [],
+  bonus: []
 };
 let currentSessionLastPlayed = {
   elimination: "",
   blitz: "",
-  ctf: ""
+  ctf: "",
+  bonus: ""
 };
 const API_TIMEOUT_MS = 30000;
 
@@ -520,7 +524,8 @@ async function canLeaveCurrentTab(nextTab){
       sessionProgressSkippedMaps = {
         elimination: [],
         blitz: [],
-        ctf: []
+        ctf: [],
+        bonus: []
       };
       renderAllSessionViews();
       return true;
@@ -1951,6 +1956,11 @@ function renderHistorySessionMaps(match){
       label: "CTF",
       className: "ctfHeader",
       maps: match.playedCtf
+    },
+    {
+      label: "Bonus",
+      className: "bonusHeader",
+      maps: match.playedBonus
     }
   ].filter(section => section.maps);
 
@@ -2008,7 +2018,8 @@ function getHistoryPlayedMapsFromMatch(match){
   return {
     elimination: splitHistoryMapText(match.playedElimination),
     blitz: splitHistoryMapText(match.playedBlitz),
-    ctf: splitHistoryMapText(match.playedCtf)
+    ctf: splitHistoryMapText(match.playedCtf),
+    bonus: splitHistoryMapText(match.playedBonus)
   };
 
 }
@@ -2016,6 +2027,7 @@ function getHistoryPlayedMapsFromMatch(match){
 function getHistoryModeLabel(mode){
 
   if(mode === "ctf") return "CTF";
+  if(mode === "bonus") return "Bonus";
 
   return mode.charAt(0).toUpperCase() + mode.slice(1);
 
@@ -2068,16 +2080,18 @@ function renderHistoryPlayedMapsEditor(state){
 
   if(!body) return;
 
-  const modes = ["elimination", "blitz", "ctf"];
+  const modes = ["elimination", "blitz", "ctf", "bonus"];
 
   body.innerHTML = modes.map(mode => {
 
     const maps = state.session[mode] || [];
-    const masterMaps = globalMapList[mode] || [];
+    const masterMaps = mode === "bonus"
+      ? (globalMapList.elimination || [])
+      : (globalMapList[mode] || []);
 
     return `
       <div class="historyEditSection" data-mode="${mode}">
-        <div class="historyEditHeader ${mode === "elimination" ? "eliminationHeader" : mode === "blitz" ? "blitzHeader" : "ctfHeader"}">
+        <div class="historyEditHeader ${mode === "elimination" ? "eliminationHeader" : mode === "blitz" ? "blitzHeader" : mode === "bonus" ? "bonusHeader" : "ctfHeader"}">
           ${getHistoryModeLabel(mode)}
         </div>
 
@@ -2738,7 +2752,8 @@ function normalizeSessionData(data = {}){
   return {
     elimination: Array.isArray(data.elimination) ? data.elimination.filter(Boolean) : [],
     blitz: Array.isArray(data.blitz) ? data.blitz.filter(Boolean) : [],
-    ctf: Array.isArray(data.ctf) ? data.ctf.filter(Boolean) : []
+    ctf: Array.isArray(data.ctf) ? data.ctf.filter(Boolean) : [],
+    bonus: Array.isArray(data.bonus) ? data.bonus.filter(Boolean) : []
   };
 }
 
@@ -2746,7 +2761,8 @@ function normalizeLastPlayedMaps(data = {}){
   return {
     elimination: data && data.elimination ? data.elimination : "",
     blitz: data && data.blitz ? data.blitz : "",
-    ctf: data && data.ctf ? data.ctf : ""
+    ctf: data && data.ctf ? data.ctf : "",
+    bonus: data && data.bonus ? data.bonus : ""
   };
 }
 
@@ -2779,7 +2795,8 @@ function clearSessionProgressDirty(){
   sessionProgressSkippedMaps = {
     elimination: [],
     blitz: [],
-    ctf: []
+    ctf: [],
+    bonus: []
   };
 
 }
@@ -2804,8 +2821,10 @@ function removeSessionMapLocally(mode, index){
     maps[mode] = list;
 
     if(skippedMap){
-      sessionProgressSkippedMaps[mode] = [
-        ...(sessionProgressSkippedMaps[mode] || []),
+      const skippedMode = mode === "bonus" ? "elimination" : mode;
+
+      sessionProgressSkippedMaps[skippedMode] = [
+        ...(sessionProgressSkippedMaps[skippedMode] || []),
         skippedMap
       ].filter((mapName, mapIndex, source) => source.indexOf(mapName) === mapIndex);
     }
@@ -2872,10 +2891,18 @@ function getCustomSessionLimit(mode){
   if(mode === "elimination") return 2;
   if(mode === "blitz") return 2;
   if(mode === "ctf") return 5;
+  if(mode === "bonus") return 2;
   return 0;
 }
 
 function isMapSelectedInCustomSession(mode, mapName){
+  if(mode === "elimination"){
+    return (
+      (customSessionData.elimination || []).includes(mapName) ||
+      (customSessionData.bonus || []).includes(mapName)
+    );
+  }
+
   const list = customSessionData[mode] || [];
   return list.includes(mapName);
 }
@@ -2886,18 +2913,30 @@ async function toggleCustomSessionMap(mode, mapName){
     return;
   }
 
-  const current = [...(customSessionData[mode] || [])];
+  let targetMode = mode;
+
+  if(mode === "elimination"){
+    if((customSessionData.elimination || []).includes(mapName)){
+      targetMode = "elimination";
+    }else if((customSessionData.bonus || []).includes(mapName)){
+      targetMode = "bonus";
+    }else if((customSessionData.elimination || []).length >= getCustomSessionLimit("elimination")){
+      targetMode = "bonus";
+    }
+  }
+
+  const current = [...(customSessionData[targetMode] || [])];
   const existingIndex = current.indexOf(mapName);
 
   if(existingIndex !== -1){
     current.splice(existingIndex, 1);
   }else{
-    const limit = getCustomSessionLimit(mode);
+    const limit = getCustomSessionLimit(targetMode);
 
     if(current.length >= limit){
       const modeLabel =
-        mode === "ctf" ? "CTF" :
-        mode.charAt(0).toUpperCase() + mode.slice(1);
+        targetMode === "ctf" ? "CTF" :
+        targetMode.charAt(0).toUpperCase() + targetMode.slice(1);
 
       await showModal(`${modeLabel} already has ${limit} maps selected.`, "alert");
       return;
@@ -2908,7 +2947,7 @@ async function toggleCustomSessionMap(mode, mapName){
 
   customSessionData = {
     ...customSessionData,
-    [mode]: current
+    [targetMode]: current
   };
   customSessionHasUnsavedChanges = true;
 
@@ -2930,12 +2969,13 @@ function updateCustomMapHighlights(){
       customSessionActive && isMapSelectedInCustomSession(mode, mapName)
     );
 
-    row.classList.remove("customSelectedElimination", "customSelectedBlitz", "customSelectedCtf");
+    row.classList.remove("customSelectedElimination", "customSelectedBlitz", "customSelectedCtf", "customSelectedBonus");
 
     if(customSessionActive && isMapSelectedInCustomSession(mode, mapName)){
       if(mode === "elimination") row.classList.add("customSelectedElimination");
       if(mode === "blitz") row.classList.add("customSelectedBlitz");
       if(mode === "ctf") row.classList.add("customSelectedCtf");
+      if((customSessionData.bonus || []).includes(mapName)) row.classList.add("customSelectedBonus");
     }
   });
 
@@ -3008,6 +3048,7 @@ function renderSessionMaps(data){
   renderModeSessionList("eliminationSessionList", data.elimination || [], "elimination");
   renderModeSessionList("blitzSessionList", data.blitz || [], "blitz");
   renderModeSessionList("ctfSessionList", data.ctf || [], "ctf");
+  renderModeSessionList("bonusSessionList", data.bonus || [], "bonus");
 
   // Render new visible single-card layout
   renderUnifiedSessionMaps(data);
@@ -3116,6 +3157,12 @@ function renderUnifiedSessionMaps(data){
       mode: "ctf",
       headerClass: "ctfHeader",
       maps: data.ctf || []
+    },
+    {
+      label: "Bonus",
+      mode: "bonus",
+      headerClass: "bonusHeader",
+      maps: data.bonus || []
     }
   ];
 
@@ -3138,7 +3185,8 @@ function renderUnifiedSessionMaps(data){
      const row = document.createElement("div");
      row.className = "mapMasterRow sessionUnifiedRow";
       
-     const masterContainer = document.getElementById(section.mode + "MasterList");
+     const masterMode = section.mode === "bonus" ? "elimination" : section.mode;
+     const masterContainer = document.getElementById(masterMode + "MasterList");
 
 let masterIndex = "";
 
@@ -3236,7 +3284,8 @@ function renderModeSessionList(containerId, maps, mode){
     const row = document.createElement("div");
     row.className = "mapSessionCompactRow";
 
-    const masterContainer = document.getElementById(mode + "MasterList");
+    const masterMode = mode === "bonus" ? "elimination" : mode;
+    const masterContainer = document.getElementById(masterMode + "MasterList");
 
 let masterIndex = "";
 
@@ -3472,7 +3521,8 @@ if(clearSessionBtn){
       customSessionData = normalizeSessionData({
         elimination: [],
         blitz: [],
-        ctf: []
+        ctf: [],
+        bonus: []
       });
       customSessionHasUnsavedChanges = true;
 
@@ -3728,6 +3778,11 @@ function buildCopySessionCard(data, matchMaker, options = {}){
       label: "CTF",
       className: "ctfHeader",
       maps: (data.ctf || []).filter(Boolean)
+    },
+    {
+      label: "Bonus",
+      className: "bonusHeader",
+      maps: (data.bonus || []).filter(Boolean)
     }
   ];
 
