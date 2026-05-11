@@ -5,6 +5,7 @@ let adminLoaded = false;
 let countdownTimer = null;
 let lastMatchTimestamp = null;
 let lastGeneratedMatchups = [];
+let generatedMatchupSelectionPending = false;
 let selectedMatchKey = null;
 let matchHistory = [];
 let lastSelectedPlayers = [];
@@ -450,6 +451,15 @@ async function canLeaveCurrentTab(nextTab){
 
   if(!activeTabId || activeTabId === nextTab) return true;
 
+  if(activeTabId === "generatorTab" && generatedMatchupSelectionPending){
+    await showModal(
+      "You generated matchups but have not selected and saved one yet.",
+      "alert"
+    );
+
+    return false;
+  }
+
   if(activeTabId === "adminTab" && adminHasUnsavedChanges){
     const leave = await showModal(
       "You have unsaved player changes. Leave without saving?",
@@ -524,6 +534,29 @@ async function canLeaveCurrentTab(nextTab){
   return true;
 
 }
+
+window.canLeaveCurrentTab = canLeaveCurrentTab;
+
+function hasProtectedUnsavedWork(){
+
+  return (
+    generatedMatchupSelectionPending ||
+    adminHasUnsavedChanges ||
+    customSessionHasUnsavedChanges ||
+    sessionProgressHasUnsavedChanges ||
+    sessionMapsNeedSelection
+  );
+
+}
+
+window.addEventListener("beforeunload", (event) => {
+
+  if(!hasProtectedUnsavedWork()) return;
+
+  event.preventDefault();
+  event.returnValue = "";
+
+});
 
 async function loadInitialData(){
 
@@ -801,6 +834,15 @@ if(!maker){
     return;
   }
 
+  if(currentMatchKeyFromServer){
+    const continueGenerate = await showModal(
+      "There is already an active matchup. Generate new matchup options anyway?",
+      "confirm"
+    );
+
+    if(!continueGenerate) return;
+  }
+
   document.getElementById("generatingOverlay").style.display = "flex";
 
   const gap = document.querySelector('input[name="gapFilter"]:checked').value;
@@ -844,6 +886,7 @@ requestAnimationFrame(() => {
 matchups.sort((a,b)=>a.skillGap - b.skillGap);
 
 lastGeneratedMatchups = matchups;
+generatedMatchupSelectionPending = matchups.length > 0;
 lastSelectedPlayers = selectedPlayers.slice();
 
 /* Force overlay to stay visible for 1 seconds */
@@ -1018,6 +1061,7 @@ const data = await api({
 
 // 🔥 ONLY mark selected AFTER SUCCESS
 currentMatchKeyFromServer = key; // 🔥 FORCE SYNC IMMEDIATELY
+generatedMatchupSelectionPending = false;
 
 document.querySelectorAll(".matchOption").forEach(card=>{
   card.classList.remove("armedCard");
@@ -2332,6 +2376,7 @@ function resetGeneratedMatchups(){
 
   // Reset stored data
   lastGeneratedMatchups = [];
+  generatedMatchupSelectionPending = false;
   selectedMatchKey = null;
 
   // Disable radio buttons again
