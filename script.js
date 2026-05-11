@@ -17,6 +17,7 @@ let currentHistorySort = {
   direction: "desc"
 };
 let historyShowingAll = false;
+let historyPlayedMapsHasUnsavedChanges = false;
 let globalMapMatchMaker = "";
 let globalMapList = {
   elimination: [],
@@ -466,6 +467,20 @@ async function canLeaveCurrentTab(nextTab){
 
   if(!activeTabId || activeTabId === nextTab) return true;
 
+  if(historyPlayedMapsHasUnsavedChanges){
+    const leave = await showModal(
+      "You have unsaved played-map changes. Leave without saving?",
+      "confirm"
+    );
+
+    if(leave){
+      closeHistoryPlayedMapsEditor(true);
+      return true;
+    }
+
+    return false;
+  }
+
   if(activeTabId === "generatorTab" && generatedMatchupSelectionPending){
     await showModal(
       "You generated matchups but have not selected and saved one yet.",
@@ -560,7 +575,8 @@ function hasProtectedUnsavedWork(){
     adminHasUnsavedChanges ||
     customSessionHasUnsavedChanges ||
     sessionProgressHasUnsavedChanges ||
-    sessionMapsNeedSelection
+    sessionMapsNeedSelection ||
+    historyPlayedMapsHasUnsavedChanges
   );
 
 }
@@ -1974,7 +1990,7 @@ function renderHistorySessionMaps(match){
         <div class="historySessionTitle">SESSION MAPS PLAYED</div>
         <button type="button" class="btn btn-blue editHistoryMapsBtn">EDIT PLAYED MAPS</button>
       </div>
-      <div class="historySessionGrid">
+      <div class="historySessionGrid" style="grid-template-columns:repeat(${sections.length}, minmax(0,1fr));">
         ${sections.map(section => `
           <div class="historySessionSection">
             <div class="historySessionHeader ${section.className}">${section.label}</div>
@@ -2061,8 +2077,13 @@ function ensureHistoryPlayedMapsModal(){
 
   document.body.appendChild(modal);
 
-  modal.querySelector(".historyPlayedMapsClose").onclick = closeHistoryPlayedMapsEditor;
-  modal.querySelector("#cancelHistoryPlayedMapsBtn").onclick = closeHistoryPlayedMapsEditor;
+  modal.querySelector(".historyPlayedMapsClose").onclick = () => {
+    closeHistoryPlayedMapsEditor();
+  };
+
+  modal.querySelector("#cancelHistoryPlayedMapsBtn").onclick = () => {
+    closeHistoryPlayedMapsEditor();
+  };
 
   modal.onclick = (event) => {
     if(event.target === modal){
@@ -2175,6 +2196,7 @@ function addHistoryPlayedMap(state, mode, mapName){
 
   if(!list.includes(cleanName)){
     state.session[mode] = [...list, cleanName];
+    markHistoryPlayedMapsDirty();
   }
 
   renderHistoryPlayedMapsEditor(state);
@@ -2192,6 +2214,7 @@ function moveHistoryPlayedMap(state, mode, index, direction){
   list.splice(nextIndex, 0, mapName);
 
   state.session[mode] = list;
+  markHistoryPlayedMapsDirty();
   renderHistoryPlayedMapsEditor(state);
 
 }
@@ -2202,8 +2225,13 @@ function removeHistoryPlayedMap(state, mode, index){
   list.splice(index, 1);
 
   state.session[mode] = list;
+  markHistoryPlayedMapsDirty();
   renderHistoryPlayedMapsEditor(state);
 
+}
+
+function markHistoryPlayedMapsDirty(){
+  historyPlayedMapsHasUnsavedChanges = true;
 }
 
 async function openHistoryPlayedMapsEditor(match){
@@ -2220,6 +2248,7 @@ async function openHistoryPlayedMapsEditor(match){
   };
 
   modal._historyPlayedMapsState = state;
+  historyPlayedMapsHasUnsavedChanges = false;
   modal.style.display = "flex";
 
   renderHistoryPlayedMapsEditor(state);
@@ -2230,12 +2259,22 @@ async function openHistoryPlayedMapsEditor(match){
 
 }
 
-function closeHistoryPlayedMapsEditor(){
+async function closeHistoryPlayedMapsEditor(force = false){
 
   const modal = document.getElementById("historyPlayedMapsModal");
 
   if(!modal) return;
 
+  if(historyPlayedMapsHasUnsavedChanges && !force){
+    const discard = await showModal(
+      "You have unsaved played-map changes. Close without saving?",
+      "confirm"
+    );
+
+    if(!discard) return;
+  }
+
+  historyPlayedMapsHasUnsavedChanges = false;
   modal.style.display = "none";
 
 }
@@ -2263,7 +2302,8 @@ async function saveHistoryPlayedMapsEditor(state){
 
     sessionStorage.setItem("adminPass", pass);
     updateAdminBar();
-    closeHistoryPlayedMapsEditor();
+    historyPlayedMapsHasUnsavedChanges = false;
+    closeHistoryPlayedMapsEditor(true);
 
     await loadHistoryRange(historyShowingAll);
 
