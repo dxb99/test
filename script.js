@@ -3453,6 +3453,22 @@ masterContainer.querySelectorAll(".mapMasterRow").forEach(row=>{
   row.classList.remove("lastPlayedMap");
 });
 
+if(sessionMaps.length === 0) return;
+
+const savedLastPlayedMap = !customSessionActive && currentSessionLastPlayed
+  ? currentSessionLastPlayed[mode]
+  : "";
+
+if(savedLastPlayedMap){
+  masterContainer.querySelectorAll(".mapMasterRow").forEach(row => {
+    if(row.innerText.trim() === savedLastPlayedMap){
+      row.classList.add("lastPlayedMap");
+    }
+  });
+
+  return;
+}
+
 /* 🔥 IF NO SESSION MAPS → STOP HERE (NO HIGHLIGHT) */
 if(sessionMaps.length === 0) return;
 
