@@ -43,6 +43,11 @@ let currentSessionMaps = {
   blitz: [],
   ctf: []
 };
+let currentSessionLastPlayed = {
+  elimination: "",
+  blitz: "",
+  ctf: ""
+};
 const API_TIMEOUT_MS = 30000;
 
 function normalizeSkillValue(value){
@@ -2414,6 +2419,19 @@ function normalizeSessionData(data = {}){
   };
 }
 
+function normalizeLastPlayedMaps(data = {}){
+  return {
+    elimination: data && data.elimination ? data.elimination : "",
+    blitz: data && data.blitz ? data.blitz : "",
+    ctf: data && data.ctf ? data.ctf : ""
+  };
+}
+
+function syncSessionStateFromResponse(data){
+  currentSessionMaps = normalizeSessionData(data);
+  currentSessionLastPlayed = normalizeLastPlayedMaps(data && data.lastPlayed);
+}
+
 function getActiveSessionMaps(){
   return customSessionActive
     ? normalizeSessionData(customSessionData)
@@ -2639,7 +2657,7 @@ if(overlay){
   }
 
   await loadCustomSessionState();
-  currentSessionMaps = normalizeSessionData(sessionData);
+  syncSessionStateFromResponse(sessionData);
 
   const initialData = await api({
   action:"getInitialData"
@@ -3052,7 +3070,7 @@ if(!pass) return;
     updateAdminBar();
     clearSessionProgressDirty();
     sessionMapsNeedSelection = false;
-    currentSessionMaps = normalizeSessionData(res);
+    syncSessionStateFromResponse(res);
 
 renderAllSessionViews();
 
@@ -3101,7 +3119,7 @@ saveBtn.onclick = async () => {
   sessionStorage.setItem("adminPass", pass);
   updateAdminBar();
   clearSessionProgressDirty();
-  currentSessionMaps = normalizeSessionData(res);
+  syncSessionStateFromResponse(res);
 
   showModal("Session progress saved", "alert");
 
@@ -3162,7 +3180,7 @@ if(clearSessionBtn){
     clearSessionProgressDirty();
     sessionMapsNeedSelection = true;
 
-    currentSessionMaps = normalizeSessionData(res);
+    syncSessionStateFromResponse(res);
     renderAllSessionViews();
 
     showModal("Session maps cleared", "alert");
