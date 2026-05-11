@@ -1286,6 +1286,29 @@ transform:none;
   margin-bottom:10px;
 }
 
+.historySessionTitleRow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.historySessionTitleRow .historySessionTitle{
+  margin-bottom:0;
+}
+
+.editHistoryMapsBtn{
+  min-width:140px;
+  height:28px;
+  font-size:10px;
+  padding:0 10px;
+}
+
+body.admin-locked .editHistoryMapsBtn{
+  display:none !important;
+}
+
 .historySessionGrid{
   display:grid;
   grid-template-columns:repeat(3, minmax(0,1fr));
@@ -1317,6 +1340,177 @@ transform:none;
   font-size:12px;
   line-height:1.2;
   text-align:center;
+}
+
+.historyPlayedMapsModal{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:3600;
+  background:rgba(1,5,12,0.82);
+  backdrop-filter:blur(8px);
+  padding:18px;
+  box-sizing:border-box;
+}
+
+.historyPlayedMapsBox{
+  width:min(980px, 96vw);
+  max-height:90vh;
+  overflow:auto;
+  border-radius:14px;
+  background:var(--glass-panel);
+  border:1px solid var(--glass-border);
+  box-shadow:var(--glass-shadow), var(--glass-inset);
+  padding:18px;
+  box-sizing:border-box;
+}
+
+.historyPlayedMapsHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:16px;
+}
+
+.historyPlayedMapsEyebrow{
+  color:#facc15;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:0.8px;
+}
+
+.historyPlayedMapsTitle{
+  color:#fff;
+  font-size:22px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.historyPlayedMapsClose{
+  width:38px;
+  height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.14);
+  background:#111827;
+  color:white;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.historyPlayedMapsBody{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:14px;
+}
+
+.historyEditSection{
+  overflow:hidden;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.10);
+  background:rgba(0,0,0,0.24);
+}
+
+.historyEditHeader{
+  padding:10px 12px;
+  text-align:center;
+  font-weight:800;
+  font-size:13px;
+}
+
+.historyEditAddRow{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+  padding:10px;
+  border-top:1px solid rgba(255,255,255,0.08);
+}
+
+.historyEditSelect,
+.historyEditCustomInput{
+  min-width:0;
+  height:34px;
+  border-radius:7px;
+  border:1px solid rgba(255,255,255,0.14);
+  background:#111827;
+  color:white;
+  padding:0 9px;
+  font-size:12px;
+  box-sizing:border-box;
+}
+
+.historyEditAddRow .btn{
+  min-width:86px;
+  height:34px;
+  font-size:11px;
+  padding:0 9px;
+}
+
+.historyEditRows{
+  display:flex;
+  flex-direction:column;
+}
+
+.historyEditMapRow{
+  display:grid;
+  grid-template-columns:1fr 32px 32px 32px;
+  align-items:center;
+  gap:6px;
+  padding:8px 10px;
+  border-top:1px solid rgba(255,255,255,0.08);
+}
+
+.historyEditMapName{
+  min-width:0;
+  color:#fff;
+  font-size:12px;
+  line-height:1.2;
+}
+
+.historyEditIconBtn{
+  width:32px;
+  height:28px;
+  border-radius:7px;
+  border:1px solid rgba(255,255,255,0.12);
+  background:#111827;
+  color:white;
+  font-size:12px;
+  cursor:pointer;
+}
+
+.historyEditIconBtn:disabled{
+  opacity:0.35;
+  cursor:not-allowed;
+}
+
+.historyEditRemoveBtn{
+  color:#ff6b6b;
+}
+
+.historyEditEmpty{
+  padding:12px 10px;
+  color:#888;
+  font-size:12px;
+  text-align:center;
+  border-top:1px solid rgba(255,255,255,0.08);
+}
+
+.historyPlayedMapsActions{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:16px;
+}
+
+.historyPlayedMapsActions .btn{
+  min-width:150px;
+  height:36px;
+  font-size:12px;
 }
 
 #matchCountdown{
@@ -3568,6 +3762,16 @@ margin-top:180px;
     gap:4px;
   }
 
+  .historySessionTitleRow{
+    flex-direction:column;
+    gap:6px;
+  }
+
+  .editHistoryMapsBtn{
+    width:100%;
+    max-width:190px;
+  }
+
   .historySessionTitle{
     font-size:11px;
     margin-bottom:6px;
@@ -3601,6 +3805,39 @@ margin-top:180px;
     font-size:10px;
     line-height:1.15;
     text-align:center;
+  }
+
+  .historyPlayedMapsModal{
+    padding:10px;
+    align-items:flex-start;
+  }
+
+  .historyPlayedMapsBox{
+    width:100%;
+    max-height:94vh;
+    padding:14px;
+  }
+
+  .historyPlayedMapsTitle{
+    font-size:18px;
+  }
+
+  .historyPlayedMapsBody{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+
+  .historyEditAddRow{
+    grid-template-columns:1fr;
+  }
+
+  .historyEditAddRow .btn,
+  .historyPlayedMapsActions .btn{
+    width:100%;
+  }
+
+  .historyPlayedMapsActions{
+    flex-direction:column;
   }
 
   .tabs{
