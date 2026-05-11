@@ -1034,8 +1034,10 @@ async function selectMatchup(match, key, btn, div){
     showModal("Select Match Maker first.", "alert");
     return;
   }
+const overlay = document.getElementById("savingMatchOverlay");
 
-document.getElementById("savingMatchOverlay").style.display = "flex";
+overlay.querySelector(".generatingText").innerHTML = "SAVING<span class=\"dots\"></span>";
+overlay.style.display = "flex";
 
 const data = await api({
 
@@ -1051,7 +1053,7 @@ const data = await api({
 
   if(!data.ok){
 
-  document.getElementById("savingMatchOverlay").style.display = "none";
+  overlay.style.display = "none";
 
   showModal(data.error, "alert");
 
@@ -1083,8 +1085,6 @@ btn.disabled = true;
 btn.style.cursor = "not-allowed";
 
 /* CHANGE OVERLAY TEXT TO SAVED */
-
-const overlay = document.getElementById("savingMatchOverlay");
 
 overlay.querySelector(".generatingText").innerHTML = "SAVED ✓";
 
