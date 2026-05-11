@@ -1677,9 +1677,14 @@ async function loadHistoryRange(includeAll){
   historyShowingAll = includeAll;
 
   const toggleBtn = document.getElementById("toggleHistoryRangeBtn");
+  const status = document.getElementById("historyRangeStatus");
 
   if(toggleBtn){
     toggleBtn.innerText = includeAll ? "SHOW LAST 3 MONTHS" : "LOAD ALL HISTORY";
+  }
+
+  if(status){
+    status.innerText = includeAll ? "Showing all history" : "Showing last 3 months";
   }
 
   document.getElementById("historyLoadingOverlay").style.display = "flex";
