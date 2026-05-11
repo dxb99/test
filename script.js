@@ -16,6 +16,7 @@ let currentHistorySort = {
   key: "date",
   direction: "desc"
 };
+let historyShowingAll = false;
 let globalMapMatchMaker = "";
 let adminHasUnsavedChanges = false;
 let currentAdminSort = {
@@ -597,7 +598,10 @@ renderMatchup(data.currentMatchup);
 
 /* LOAD MATCH HISTORY */
 
-const historyData = await api({action:"getHistory"});
+const historyData = await api({
+  action:"getHistory",
+  includeAll:true
+});
 if(historyData.ok){
   matchHistory = historyData.history || [];
 }
@@ -1120,7 +1124,10 @@ setTimeout(async () => {
   }
 
   // 🔥 Refresh generator/history details quietly after the user is already on Matchup.
-  api({ action: "getHistory" }).then(historyData => {
+  api({
+    action: "getHistory",
+    includeAll: true
+  }).then(historyData => {
     if(historyData.ok){
       matchHistory = historyData.history || [];
       const updatedMatchups = generateMatchupsLocal(lastSelectedPlayers, "all");
@@ -1669,10 +1676,26 @@ async function openHistoryTab(btn){
 
   if(!(await showTab("historyTab", btn))) return;
 
+  historyShowingAll = false;
+  await loadHistoryRange(false);
+
+}
+
+async function loadHistoryRange(includeAll){
+
+  historyShowingAll = includeAll;
+
+  const toggleBtn = document.getElementById("toggleHistoryRangeBtn");
+
+  if(toggleBtn){
+    toggleBtn.innerText = includeAll ? "SHOW LAST 3 MONTHS" : "LOAD ALL HISTORY";
+  }
+
   document.getElementById("historyLoadingOverlay").style.display = "flex";
 
   const data = await api({
-    action:"getHistory"
+    action:"getHistory",
+    includeAll:includeAll
   });
 
   if(!data.ok){
@@ -2027,6 +2050,10 @@ function formatDate(date){
   }).format(d);
 
 }
+
+document.getElementById("toggleHistoryRangeBtn").onclick = () => {
+  loadHistoryRange(!historyShowingAll);
+};
 
 document.getElementById("clearHistoryBtn").onclick = clearHistory;
 
