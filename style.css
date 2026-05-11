@@ -1347,16 +1347,23 @@ transform:none;
 
 margin-bottom:15px;
 display:flex;
-flex-direction:column;
 align-items:center;
 justify-content:center;
-gap:10px;
+gap:12px;
 flex-wrap:nowrap;
 width:95%;
-max-width:320px;
 margin-left:auto;
 margin-right:auto;
 
+}
+
+.historyRangeStatus{
+font-size:12px;
+color:#facc15;
+font-weight:600;
+white-space:nowrap;
+min-width:150px;
+text-align:center;
 }
 
 .historyControls select{
@@ -1374,8 +1381,7 @@ min-width:140px;
 
 .historyControls .btn{
 
-width:100%;
-min-width:0;
+min-width:180px;
 height:36px;
 font-size:13px;
 padding:0 12px;
@@ -2688,6 +2694,18 @@ body.admin-unlocked .mapDeleteMini {
   .adminControls{
     flex-wrap:nowrap;
     overflow-x:hidden;
+  }
+
+  .historyControls{
+    flex-wrap:wrap;
+    gap:8px;
+  }
+
+  .historyRangeStatus{
+    order:3;
+    width:100%;
+    min-width:0;
+    font-size:11px;
   }
     
   .historyControls .btn,
