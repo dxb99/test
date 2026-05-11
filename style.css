@@ -1311,7 +1311,7 @@ body.admin-locked .editHistoryMapsBtn{
 
 .historySessionGrid{
   display:grid;
-  grid-template-columns:repeat(3, minmax(0,1fr));
+  grid-template-columns:repeat(4, minmax(0,1fr));
   gap:8px;
 }
 
@@ -2095,6 +2095,10 @@ text-align:center;
   color:#4ba3ff;
 }
 
+.mapMasterRow.customSelectedBonus{
+  color:#22c55e;
+}
+
 .mapMasterRow:last-child{
   border-bottom:none;
 }
@@ -2320,6 +2324,11 @@ body.admin-unlocked .mapDeleteMini{
 .ctfHeader{
   color:#4ba3ff;
   background:linear-gradient(180deg, rgba(75,163,255,0.18), rgba(75,163,255,0.06));
+}
+
+.bonusHeader{
+  color:#ffffff;
+  background:linear-gradient(180deg, rgba(34,197,94,0.22), rgba(34,197,94,0.08));
 }
 
 body.admin-locked .mapDeleteMini {
@@ -3625,6 +3634,11 @@ background:transparent;
   background:linear-gradient(180deg, rgba(75,163,255,0.18), rgba(75,163,255,0.06));
 }
 
+.bonusHeader{
+  color:#ffffff;
+  background:linear-gradient(180deg, rgba(34,197,94,0.22), rgba(34,197,94,0.08));
+}
+
 .tabContent{
 margin-top:180px;
 }
@@ -3758,7 +3772,7 @@ margin-top:180px;
   }
 
   .historySessionGrid{
-    grid-template-columns:repeat(3, minmax(0,1fr));
+    grid-template-columns:repeat(4, minmax(0,1fr));
     gap:4px;
   }
 
