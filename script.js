@@ -843,15 +843,6 @@ if(!maker){
     return;
   }
 
-  if(currentMatchKeyFromServer){
-    const continueGenerate = await showModal(
-      "There is already an active matchup. Generate new matchup options anyway?",
-      "confirm"
-    );
-
-    if(!continueGenerate) return;
-  }
-
   document.getElementById("generatingOverlay").style.display = "flex";
 
   const gap = document.querySelector('input[name="gapFilter"]:checked').value;
