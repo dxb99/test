@@ -18,11 +18,16 @@ let currentHistorySort = {
 };
 let historyShowingAll = false;
 let historyPlayedMapsHasUnsavedChanges = false;
+let matchupPickCounts = null;
+let matchupPickCountsPromise = null;
+let mapListLoaded = false;
+let mapListLoadPromise = null;
 let globalMapMatchMaker = "";
 let globalMapList = {
   elimination: [],
   blitz: [],
-  ctf: []
+  ctf: [],
+  bonus: []
 };
 let adminHasUnsavedChanges = false;
 let currentAdminSort = {
@@ -353,7 +358,6 @@ blitzToggle.addEventListener("change", () => {
 }
 
     setupMapListButtons();
-    await loadSessionMaps();
 
     document.getElementById("adminLockBtn").onclick = clearAdminSession;
     
@@ -592,7 +596,7 @@ window.addEventListener("beforeunload", (event) => {
 
 async function loadInitialData(){
 
-const data = await api({action:"getInitialData"});
+const data = await api({action:"getStartupData"});
 
 if(!data.ok){
   throw new Error("Failed loading data");
@@ -600,7 +604,6 @@ if(!data.ok){
 
 allPlayers = data.players || [];
 globalMapMatchMaker = data.mapMatchMaker || "";
-globalMapList = normalizeSessionData(data.mapList || globalMapList);
 
 populatePlayers(allPlayers);
 
@@ -623,15 +626,70 @@ if(lastGeneratedMatchups.length === 0){
 
 renderMatchup(data.currentMatchup);
 
-/* LOAD MATCH HISTORY */
-
-const historyData = await api({
-  action:"getHistory",
-  includeAll:true
-});
-if(historyData.ok){
-  matchHistory = historyData.history || [];
+if(data.sessionMaps && data.sessionMaps.ok){
+  syncSessionStateFromResponse(data.sessionMaps);
 }
+
+if(data.customSession && data.customSession.ok){
+  customSessionActive = false;
+  customSessionHasUnsavedChanges = false;
+  customSessionData = normalizeSessionData(data.customSession.session);
+}
+
+updateCustomSessionButtons();
+renderAllSessionViews();
+
+}
+
+async function ensureMatchupPickCounts(){
+
+  if(matchupPickCounts){
+    return matchupPickCounts;
+  }
+
+  if(matchupPickCountsPromise){
+    return matchupPickCountsPromise;
+  }
+
+  matchupPickCountsPromise = api({
+    action:"getMatchupPickCounts"
+  }).then(data => {
+    matchupPickCounts = data && data.ok ? (data.counts || {}) : {};
+    return matchupPickCounts;
+  }).catch(() => {
+    matchupPickCounts = {};
+    return matchupPickCounts;
+  }).finally(() => {
+    matchupPickCountsPromise = null;
+  });
+
+  return matchupPickCountsPromise;
+
+}
+
+function resetMatchupPickCounts(){
+  matchupPickCounts = null;
+  matchupPickCountsPromise = null;
+}
+
+function getMatchupPickCountKey(redNames, blueNames){
+
+  const red = (Array.isArray(redNames) ? redNames : [])
+    .filter(Boolean)
+    .slice()
+    .sort()
+    .join(",");
+
+  const blue = (Array.isArray(blueNames) ? blueNames : [])
+    .filter(Boolean)
+    .slice()
+    .sort()
+    .join(",");
+
+  const first = red < blue ? red : blue;
+  const second = red < blue ? blue : red;
+
+  return first + "||" + second;
 
 }
 
@@ -873,6 +931,8 @@ if(!maker){
   document.getElementById("generatingOverlay").style.display = "flex";
 
   const gap = document.querySelector('input[name="gapFilter"]:checked').value;
+
+await ensureMatchupPickCounts();
 
 const matchups = generateMatchupsLocal(selectedPlayers, gap);
 
@@ -1126,11 +1186,9 @@ setTimeout(async () => {
   try{
 
     // 🔥 Refresh only the visible matchup before hiding overlay.
-    const data = await api({action:"getInitialData"});
+    const data = await api({action:"getCurrentMatchupData"});
 
     if(data.ok){
-      allPlayers = data.players || allPlayers;
-      globalMapMatchMaker = data.mapMatchMaker || globalMapMatchMaker;
       renderMatchup(data.currentMatchup);
       renderUpcomingSessionCard(getActiveSessionMaps());
     }
@@ -1142,17 +1200,12 @@ setTimeout(async () => {
   }
 
   // 🔥 Refresh generator/history details quietly after the user is already on Matchup.
-  api({
-    action: "getHistory",
-    includeAll: true
-  }).then(historyData => {
-    if(historyData.ok){
-      matchHistory = historyData.history || [];
-      const updatedMatchups = generateMatchupsLocal(lastSelectedPlayers, "all");
-      lastGeneratedMatchups = updatedMatchups;
-      updateGapCounts();
-      applyGapFilter();
-    }
+  resetMatchupPickCounts();
+  ensureMatchupPickCounts().then(() => {
+    const updatedMatchups = generateMatchupsLocal(lastSelectedPlayers, "all");
+    lastGeneratedMatchups = updatedMatchups;
+    updateGapCounts();
+    applyGapFilter();
   }).catch(() => {});
 
 }, 1000);
@@ -1730,7 +1783,8 @@ async function loadHistoryRange(includeAll){
 
   }
 
-  renderHistory(data.history);
+  matchHistory = data.history || [];
+  renderHistory(matchHistory);
 
   setupHistorySorting();
   updateSortIndicators();
@@ -2487,7 +2541,7 @@ function startMatchAutoRefresh(){
     try{
 
       const data = await api({
-        action:"getInitialData"
+        action:"getCurrentMatchupData"
       });
 
       if(data.ok){
@@ -2543,26 +2597,16 @@ if(seen.has(key1) || seen.has(key2)) return;
 
 seen.add(key1);
 
-/* CALCULATE PICK COUNT FROM HISTORY */
+/* CALCULATE PICK COUNT FROM LIGHTWEIGHT HISTORY COUNTS */
 
-const redNamesSorted = red.map(p=>p.name).sort().join(",");
-const blueNamesSorted = blue.map(p=>p.name).sort().join(",");
+const pickCountKey = getMatchupPickCountKey(
+  red.map(p=>p.name),
+  blue.map(p=>p.name)
+);
 
-let pickCount = 0;
-
-matchHistory.forEach(h=>{
-
-  const hRed = h.redTeam.split(", ").sort().join(",");
-  const hBlue = h.blueTeam.split(", ").sort().join(",");
-
-  if(
-    (hRed === redNamesSorted && hBlue === blueNamesSorted) ||
-    (hRed === blueNamesSorted && hBlue === redNamesSorted)
-  ){
-    pickCount++;
-  }
-
-});
+let pickCount = matchupPickCounts && matchupPickCounts[pickCountKey]
+  ? matchupPickCounts[pickCountKey]
+  : 0;
 
 const redSorted = [...red].sort((a,b)=>a.name.localeCompare(b.name));
 const blueSorted = [...blue].sort((a,b)=>a.name.localeCompare(b.name));
@@ -3062,15 +3106,6 @@ if(overlay){
   await loadCustomSessionState();
   syncSessionStateFromResponse(sessionData);
 
-  const initialData = await api({
-  action:"getInitialData"
-});
-
-if(initialData.ok && initialData.mapList){
-  globalMapList = normalizeSessionData(initialData.mapList);
-  renderMasterMapList(initialData.mapList);
-}
-
 updateCustomSessionButtons();
 renderAllSessionViews();
 
@@ -3082,6 +3117,57 @@ if(overlay){
 }
 
 // 🔥 RENDER SESSION MAPS
+async function loadMapListTabData(){
+
+  if(mapListLoaded || mapListLoadPromise){
+    return mapListLoadPromise || Promise.resolve();
+  }
+
+  const overlay = document.getElementById("mapListLoadingOverlay");
+
+  if(overlay){
+    overlay.style.display = "flex";
+  }
+
+  mapListLoadPromise = api({
+    action:"getMapListData"
+  }).then(data => {
+
+    if(!data || !data.ok){
+      throw new Error("Failed loading map list");
+    }
+
+    globalMapList = normalizeSessionData(data.mapList || {});
+    renderMasterMapList(globalMapList);
+    updateCustomMapHighlights();
+
+    setTimeout(()=>{
+      handleSessionHighlightUpdate();
+    }, 50);
+
+    mapListLoaded = true;
+
+  }).catch(err => {
+
+    console.log(err);
+    showModal("Could not load full map list.", "alert");
+
+  }).finally(() => {
+
+    if(overlay){
+      overlay.style.display = "none";
+    }
+
+    mapListLoadPromise = null;
+
+  });
+
+  return mapListLoadPromise;
+
+}
+
+window.loadMapListTabData = loadMapListTabData;
+
 function renderSessionMaps(data){
 
   // Keep legacy hidden lists updated for existing highlight logic
