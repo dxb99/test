@@ -932,7 +932,13 @@ if(!maker){
 
   const gap = document.querySelector('input[name="gapFilter"]:checked').value;
 
-await ensureMatchupPickCounts();
+try{
+  await ensureMatchupPickCounts();
+}catch(err){
+  document.getElementById("generatingOverlay").style.display = "none";
+  showModal(getActionErrorMessage(err, "Could not load matchup pick counts."), "alert");
+  return;
+}
 
 const matchups = generateMatchupsLocal(selectedPlayers, gap);
 
@@ -1495,9 +1501,17 @@ async function openAdminTab(btn){
 
   document.getElementById("historyLoadingOverlay").style.display = "flex";
 
-  const data = await api({
-    action:"getPlayersAdmin"
-  });
+  let data;
+
+  try{
+    data = await api({
+      action:"getPlayersAdmin"
+    });
+  }catch(err){
+    document.getElementById("historyLoadingOverlay").style.display = "none";
+    showModal(getActionErrorMessage(err, "Failed loading players."), "alert");
+    return;
+  }
 
   /* HIDE LOADING OVERLAY */
 
@@ -1769,10 +1783,18 @@ async function loadHistoryRange(includeAll){
 
   document.getElementById("historyLoadingOverlay").style.display = "flex";
 
-  const data = await api({
-    action:"getHistory",
-    includeAll:includeAll
-  });
+  let data;
+
+  try{
+    data = await api({
+      action:"getHistory",
+      includeAll:includeAll
+    });
+  }catch(err){
+    document.getElementById("historyLoadingOverlay").style.display = "none";
+    showModal(getActionErrorMessage(err, "Could not load history."), "alert");
+    return;
+  }
 
   if(!data.ok){
 
