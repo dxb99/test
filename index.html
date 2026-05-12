@@ -407,6 +407,10 @@ document.getElementById(tab).classList.add("active");
 
 if(btn) btn.classList.add("active");
 
+if(tab === "mapListTab" && window.loadMapListTabData){
+  window.loadMapListTabData();
+}
+
 /* 🔥 ALWAYS SCROLL TO TOP ON TAB CHANGE */
 window.scrollTo({
   top: 0,
