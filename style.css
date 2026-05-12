@@ -1766,7 +1766,8 @@ background:#992222;
 #historyLoadingOverlay,
 #clearHistoryOverlay,
 #savingOverlay,
-#savingMatchOverlay{
+#savingMatchOverlay,
+#mapListLoadingOverlay{
   
 position:fixed;
 top:0;
