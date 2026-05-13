@@ -127,8 +127,11 @@ function showModal(message, type = "alert", confirmText = "Confirm", cancelText 
 
     setModalMessage(msg, message);
 
-    confirmBtn.innerHTML = confirmText === "Confirm" ? "✓" : confirmText;
-    cancelBtn.innerHTML = cancelText === "Cancel" ? "✕" : cancelText;
+    confirmBtn.textContent = confirmText === "Confirm"
+      ? (type === "alert" ? "OK" : "CONFIRM")
+      : confirmText;
+
+    cancelBtn.textContent = cancelText === "Cancel" ? "CANCEL" : cancelText;
 
     input.style.display = withInput ? "block" : "none";
     input.type = inputType;
@@ -486,10 +489,22 @@ async function canLeaveCurrentTab(nextTab){
   }
 
   if(activeTabId === "generatorTab" && generatedMatchupSelectionPending){
-    await showModal(
-      "You generated matchups but have not selected and saved one yet.",
-      "alert"
+    const message = currentMatchKeyFromServer
+      ? "Leave without selecting a matchup?\nThe current saved matchup will stay active."
+      : "Leave without selecting a matchup?\nNo new matchup will be saved.";
+
+    const leave = await showModal(
+      message,
+      "confirm",
+      "LEAVE WITHOUT SAVING",
+      "STAY ON GENERATOR"
     );
+
+    if(leave){
+      resetGeneratedMatchups();
+      generatedMatchupSelectionPending = false;
+      return true;
+    }
 
     return false;
   }
