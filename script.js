@@ -502,8 +502,8 @@ async function canLeaveCurrentTab(nextTab){
     (generatedMatchupSelectionPending || (currentMatchKeyFromServer && hasVisibleGeneratedMatchups()))
   ){
     const message = currentMatchKeyFromServer
-      ? "Leave without changing matchup?"
-      : "Leave without selecting matchup?";
+      ? "Leave without changing matchup?\nCurrent matchup will stay active."
+      : "Leave without selecting matchup?\nNo matchup will be saved.";
 
     const leave = await showModal(
       message,
