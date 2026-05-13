@@ -128,10 +128,10 @@ function showModal(message, type = "alert", confirmText = "Confirm", cancelText 
     setModalMessage(msg, message);
 
     confirmBtn.textContent = confirmText === "Confirm"
-      ? (type === "alert" ? "OK" : "CONFIRM")
+      ? (type === "alert" ? "OK" : (withInput ? "CONFIRM" : "YES"))
       : confirmText;
 
-    cancelBtn.textContent = cancelText === "Cancel" ? "CANCEL" : cancelText;
+    cancelBtn.textContent = cancelText === "Cancel" ? (withInput ? "CANCEL" : "NO") : cancelText;
 
     input.style.display = withInput ? "block" : "none";
     input.type = inputType;
@@ -495,9 +495,7 @@ async function canLeaveCurrentTab(nextTab){
 
     const leave = await showModal(
       message,
-      "confirm",
-      "LEAVE WITHOUT SAVING",
-      "STAY ON GENERATOR"
+      "confirm"
     );
 
     if(leave){
