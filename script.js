@@ -6,6 +6,7 @@ let countdownTimer = null;
 let lastMatchTimestamp = null;
 let lastGeneratedMatchups = [];
 let generatedMatchupSelectionPending = false;
+let matchupTabChangeAfterSave = false;
 let selectedMatchKey = null;
 let matchHistory = [];
 let lastSelectedPlayers = [];
@@ -467,6 +468,10 @@ function getActionErrorMessage(err, fallback = "Action failed."){
 
 }
 
+function hasVisibleGeneratedMatchups(){
+  return document.querySelectorAll("#generatedMatchups .matchOption").length > 0;
+}
+
 async function canLeaveCurrentTab(nextTab){
 
   const activeTab = document.querySelector(".tabContent.active");
@@ -488,10 +493,17 @@ async function canLeaveCurrentTab(nextTab){
     return false;
   }
 
-  if(activeTabId === "generatorTab" && generatedMatchupSelectionPending){
+  if(activeTabId === "generatorTab" && matchupTabChangeAfterSave){
+    return true;
+  }
+
+  if(
+    activeTabId === "generatorTab" &&
+    (generatedMatchupSelectionPending || (currentMatchKeyFromServer && hasVisibleGeneratedMatchups()))
+  ){
     const message = currentMatchKeyFromServer
-      ? "Leave without selecting a matchup?\nThe current saved matchup will stay active."
-      : "Leave without selecting a matchup?\nNo new matchup will be saved.";
+      ? "Leave without changing matchup?"
+      : "Leave without selecting matchup?";
 
     const leave = await showModal(
       message,
@@ -587,8 +599,16 @@ window.canLeaveCurrentTab = canLeaveCurrentTab;
 
 function hasProtectedUnsavedWork(){
 
+  const activeTab = document.querySelector(".tabContent.active");
+  const activeTabId = activeTab ? activeTab.id : "";
+
   return (
     generatedMatchupSelectionPending ||
+    (
+      activeTabId === "generatorTab" &&
+      !!currentMatchKeyFromServer &&
+      hasVisibleGeneratedMatchups()
+    ) ||
     adminHasUnsavedChanges ||
     customSessionHasUnsavedChanges ||
     sessionProgressHasUnsavedChanges ||
@@ -1200,7 +1220,9 @@ setTimeout(async () => {
 
   // 🔥 Switch while overlay is still visible, so Generator never flashes back onscreen.
   const matchupBtn = document.querySelector('.tabButton[onclick*="matchupTab"]');
-  showTab("matchupTab", matchupBtn);
+  matchupTabChangeAfterSave = true;
+  await showTab("matchupTab", matchupBtn);
+  matchupTabChangeAfterSave = false;
 
   try{
 
