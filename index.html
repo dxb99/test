@@ -370,8 +370,115 @@ CLICK TO GENERATE MATCHUP
 
 <div id="helpTab" class="tabContent">
 
-  <div class="helpImageWrap">
-    <img src="Spoon.png" alt="Spoon" class="helpImage">
+  <div id="helpGuide" class="helpGuide">
+
+    <div class="helpHero">
+      <div class="helpEyebrow">DXB99 APP GUIDE</div>
+      <h2>HOW TO USE THE APP</h2>
+      <p>Pick a topic below, or search for a word like maps, history, save, admin, or matchup.</p>
+    </div>
+
+    <div class="helpSearchCard">
+      <input id="helpSearchInput" class="helpSearchInput" type="search" placeholder="Search the guide..." autocomplete="off">
+      <div id="helpSearchCount" class="helpSearchCount">Showing all guide sections</div>
+    </div>
+
+    <div class="helpTopicGrid">
+      <button class="helpTopicBtn" data-help-target="helpMatchup">MATCHUP</button>
+      <button class="helpTopicBtn" data-help-target="helpGenerator">GENERATOR</button>
+      <button class="helpTopicBtn" data-help-target="helpHistory">HISTORY</button>
+      <button class="helpTopicBtn" data-help-target="helpPlayers">PLAYERS</button>
+      <button class="helpTopicBtn" data-help-target="helpMapList">MAP LIST</button>
+      <button class="helpTopicBtn" data-help-target="helpHelp">HELP</button>
+    </div>
+
+    <div class="helpSections">
+
+      <section id="helpMatchup" class="helpSection" data-help-keywords="matchup current match teams red blue timer match maker session maps">
+        <h3>MATCHUP TAB</h3>
+        <p>This is the main screen. It shows the current matchup, the two teams, team skill totals, the skill difference, and the session maps.</p>
+        <ol>
+          <li>If there is no matchup, press <strong>CLICK TO GET STARTED</strong>. This takes you to the Generator tab.</li>
+          <li>If there is a matchup, read the red team and blue team from this screen.</li>
+          <li>The timer shows when the current matchup expires.</li>
+          <li>The Session Maps card shows the maps planned for the session.</li>
+          <li>The highlighted Match Maker name shows who is currently responsible for making teams.</li>
+        </ol>
+        <p class="helpSimpleRule">Simple rule: this tab is for viewing what everyone should play right now.</p>
+      </section>
+
+      <section id="helpGenerator" class="helpSection" data-help-keywords="generator generate matchup players select match maker skill difference blitz uneven teams">
+        <h3>GENERATOR TAB</h3>
+        <p>This is where you create balanced team options.</p>
+        <ol>
+          <li>Pick the Match Maker from the dropdown.</li>
+          <li>Make sure the players who are playing are checked.</li>
+          <li>Click <strong>CLICK TO GENERATE MATCHUP</strong>.</li>
+          <li>The app shows possible teams, sorted by the smallest skill difference first.</li>
+          <li>Click <strong>CLICK TO SELECT</strong> on the matchup you want to use.</li>
+          <li>After saving, the app takes you back to the Matchup tab.</li>
+        </ol>
+        <p>If teams are uneven, the Blitz option can show matchups where the smaller team has more skill points.</p>
+        <p class="helpSimpleRule">Simple rule: generate options, then always select the one you want.</p>
+      </section>
+
+      <section id="helpHistory" class="helpSection" data-help-keywords="history old matches previous match maps played edit session maps load clear matchup history">
+        <h3>HISTORY TAB</h3>
+        <p>This tab shows old matchups that were selected.</p>
+        <ol>
+          <li>By default, the app shows recent history so it loads faster.</li>
+          <li>Click a history row to open the full match card.</li>
+          <li>The match card shows both teams, skill totals, difference, and maps played for that session.</li>
+          <li>Use <strong>LOAD ALL HISTORY</strong> if you need older matches.</li>
+          <li>Use <strong>CLEAR MATCHUP HISTORY</strong> only if you really want to erase history and reset the current matchup.</li>
+        </ol>
+        <p>If session maps need correction, use the edit map controls inside the opened history card, then save the changes.</p>
+        <p class="helpSimpleRule">Simple rule: history is where you check what happened before.</p>
+      </section>
+
+      <section id="helpPlayers" class="helpSection" data-help-keywords="players admin skill add remove match maker checkbox save edit names">
+        <h3>PLAYERS TAB</h3>
+        <p>This tab is for managing players. It is protected by admin mode.</p>
+        <ol>
+          <li>Unlock admin mode first.</li>
+          <li>Click <strong>ADD PLAYER</strong> to add a new player.</li>
+          <li>Edit a player name directly in the table.</li>
+          <li>Use the skill controls to adjust a player's skill number.</li>
+          <li>Use the Match Maker checkbox to choose who can appear in the Match Maker list.</li>
+          <li>Click <strong>SAVE</strong> when done.</li>
+        </ol>
+        <p class="helpSimpleRule">Simple rule: if you change players, click SAVE before leaving.</p>
+      </section>
+
+      <section id="helpMapList" class="helpSection" data-help-keywords="map list maps session generate save progress skipped played bonus elimination blitz ctf custom clear copy">
+        <h3>MAP LIST TAB</h3>
+        <p>This tab controls the maps for the session.</p>
+        <ol>
+          <li>Click <strong>GENERATE SESSION MAPS</strong> to create the next map list.</li>
+          <li>The left side shows the maps for this session.</li>
+          <li>The right side shows the complete map list.</li>
+          <li>If a map was skipped, click the <strong>X</strong> next to that map.</li>
+          <li>After the session is done, click <strong>SAVE SESSION PROGRESS</strong>.</li>
+          <li>The app remembers what was played and brings skipped maps back later.</li>
+        </ol>
+        <p><strong>Bonus</strong> is connected to Elimination. Bonus maps count as extra Elimination maps.</p>
+        <p>Use <strong>BUILD CUSTOM SESSION</strong> if you want to pick maps yourself. Use <strong>COPY SESSION MAPS</strong> to copy the session map card as an image.</p>
+        <p class="helpSimpleRule">Simple rule: before saving progress, only maps that were played should still be showing.</p>
+      </section>
+
+      <section id="helpHelp" class="helpSection" data-help-keywords="help guide search instructions tabs how to use">
+        <h3>HELP TAB</h3>
+        <p>This is the guide you are reading right now.</p>
+        <ol>
+          <li>Click a tab name at the top of this guide to jump to that section.</li>
+          <li>Use the search box to find words like player, maps, save, history, or admin.</li>
+          <li>If nothing shows up, clear the search box and try a simpler word.</li>
+        </ol>
+        <p class="helpSimpleRule">Simple rule: come here when you forget what a button does.</p>
+      </section>
+
+    </div>
+
   </div>
 
 </div>
