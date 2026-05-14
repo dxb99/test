@@ -3765,9 +3765,9 @@ margin-top:180px;
 @media(max-width:700px){
   body{
     background:
-    linear-gradient(180deg, rgba(0,0,0,0.88) 0%, rgba(3,3,3,0.91) 44%, rgba(0,0,0,0.95) 100%),
-    linear-gradient(90deg, rgba(0,0,0,0.36), rgba(0,0,0,0.52), rgba(0,0,0,0.36)),
-    linear-gradient(90deg, rgba(255,75,75,0.035), transparent 32%, transparent 68%, rgba(75,163,255,0.035)),
+    linear-gradient(180deg, rgba(0,0,0,0.76) 0%, rgba(5,5,5,0.84) 44%, rgba(0,0,0,0.90) 100%),
+    linear-gradient(90deg, rgba(0,0,0,0.16), rgba(0,0,0,0.28), rgba(0,0,0,0.16)),
+    linear-gradient(90deg, rgba(255,75,75,0.06), transparent 32%, transparent 68%, rgba(75,163,255,0.06)),
     url("PLAYERS.M.png?v=1");
     background-size:cover;
     background-position:center;
