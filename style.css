@@ -1544,17 +1544,17 @@ body.admin-locked .editHistoryMapsBtn{
   align-items:center;
   gap:8px;
   margin:0 0 12px 0;
-  padding:14px;
-  background:rgba(12,12,12,0.84);
-  border:1px solid rgba(255,255,255,0.13);
-  border-radius:12px;
+  padding:10px;
+  background:rgba(10,10,10,0.72);
+  border:1px solid rgba(255,255,255,0.10);
+  border-radius:8px;
 }
 
 .helpSearchInput{
   width:100%;
   height:44px;
   padding:0 14px;
-  border-radius:9px;
+  border-radius:7px;
   border:1px solid rgba(96,165,250,0.55);
   background:#d1d5db;
   color:#101318;
@@ -1569,7 +1569,7 @@ body.admin-locked .editHistoryMapsBtn{
 
 .helpSearchInput:focus{
   border-color:#60a5fa;
-  box-shadow:0 0 0 3px rgba(37,99,235,0.28);
+  box-shadow:0 0 0 2px rgba(37,99,235,0.26);
 }
 
 .helpSearchCount{
@@ -1590,10 +1590,9 @@ body.admin-locked .editHistoryMapsBtn{
   position:sticky;
   top:104px;
   padding:12px;
-  background:rgba(12,12,12,0.84);
-  border:1px solid rgba(255,255,255,0.13);
-  border-radius:14px;
-  box-shadow:0 18px 42px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.09);
+  background:rgba(10,10,10,0.74);
+  border:1px solid rgba(255,255,255,0.10);
+  border-radius:8px;
 }
 
 .helpTopicGrid{
@@ -1605,15 +1604,14 @@ body.admin-locked .editHistoryMapsBtn{
 .helpTopicBtn{
   min-height:44px;
   border:none;
-  border-radius:10px;
-  background:rgba(15,23,42,0.88);
+  border-radius:7px;
+  background:rgba(17,24,39,0.78);
   color:#dbeafe;
   font-size:13px;
   font-weight:900;
   letter-spacing:0.7px;
   cursor:pointer;
-  border:1px solid rgba(96,165,250,0.24);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,0.10);
+  border:1px solid rgba(255,255,255,0.10);
   text-align:left;
   padding:0 14px;
 }
@@ -1623,10 +1621,9 @@ body.admin-locked .editHistoryMapsBtn{
 }
 
 .helpTopicBtn.active{
-  background:linear-gradient(180deg, #2563eb, #0f3f98);
+  background:#1456c8;
   color:#fff;
-  border-color:rgba(96,165,250,0.72);
-  box-shadow:0 0 18px rgba(37,99,235,0.34), inset 0 1px 0 rgba(255,255,255,0.18);
+  border-color:#60a5fa;
 }
 
 .helpTopicBtn.hidden{
@@ -1640,10 +1637,10 @@ body.admin-locked .editHistoryMapsBtn{
 .helpSection{
   scroll-margin-top:120px;
   padding:22px;
-  background:rgba(14,14,14,0.86);
-  border:1px solid rgba(255,255,255,0.13);
-  border-radius:14px;
-  box-shadow:0 18px 42px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.09);
+  background:rgba(10,10,10,0.74);
+  border:1px solid rgba(255,255,255,0.10);
+  border-radius:8px;
+  text-align:left;
 }
 
 .helpSection.hidden{
@@ -1655,6 +1652,7 @@ body.admin-locked .editHistoryMapsBtn{
   color:#facc15;
   font-size:22px;
   letter-spacing:1px;
+  text-align:center;
 }
 
 .helpSection h4{
@@ -1663,6 +1661,7 @@ body.admin-locked .editHistoryMapsBtn{
   font-size:14px;
   font-weight:900;
   letter-spacing:1px;
+  text-align:left;
 }
 
 .helpSection p{
@@ -1670,12 +1669,14 @@ body.admin-locked .editHistoryMapsBtn{
   color:#e5e7eb;
   font-size:15px;
   line-height:1.55;
+  text-align:left;
 }
 
 .helpSection ol{
   margin:0 0 14px 0;
   padding-left:22px;
   color:#d7dde8;
+  text-align:left;
 }
 
 .helpSection li{
@@ -1687,10 +1688,11 @@ body.admin-locked .editHistoryMapsBtn{
   margin-top:14px !important;
   padding:12px 14px;
   border-left:4px solid #22c55e;
-  background:rgba(34,197,94,0.10);
-  border-radius:8px;
+  background:rgba(34,197,94,0.08);
+  border-radius:6px;
   color:#f8fafc !important;
   font-weight:700;
+  text-align:left !important;
 }
 
 .helpNoResults{
@@ -1698,9 +1700,9 @@ body.admin-locked .editHistoryMapsBtn{
   text-align:center;
   color:#facc15;
   font-weight:800;
-  background:rgba(12,12,12,0.84);
+  background:rgba(10,10,10,0.74);
   border:1px solid rgba(250,204,21,0.24);
-  border-radius:12px;
+  border-radius:8px;
 }
 
 .helpNoResults.hidden{
