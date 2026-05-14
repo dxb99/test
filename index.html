@@ -394,79 +394,131 @@ CLICK TO GENERATE MATCHUP
 
       <div class="helpSections">
 
-      <section id="helpMatchup" class="helpSection" data-help-keywords="matchup current match teams red blue timer match maker session maps">
+      <section id="helpMatchup" class="helpSection" data-help-keywords="matchup current match teams red blue timer match maker session maps get started selected mid">
         <h3>MATCHUP TAB</h3>
-        <p>This is the main screen. It shows the current matchup, the two teams, team skill totals, the skill difference, and the session maps.</p>
+        <p>This is the main screen. Use it to see what should be played right now.</p>
+        <h4>WHAT YOU SEE HERE</h4>
         <ol>
-          <li>If there is no matchup, press <strong>CLICK TO GET STARTED</strong>. This takes you to the Generator tab.</li>
-          <li>If there is a matchup, read the red team and blue team from this screen.</li>
-          <li>The timer shows when the current matchup expires.</li>
-          <li>The Session Maps card shows the maps planned for the session.</li>
-          <li>The highlighted Match Maker name shows who is currently responsible for making teams.</li>
+          <li><strong>Current matchup:</strong> the red team, blue team, each team's skill total, and the difference.</li>
+          <li><strong>MID:</strong> the matchup ID. The same player combination keeps the same MID.</li>
+          <li><strong>Timer:</strong> shows how long the current matchup stays active.</li>
+          <li><strong>Session Maps:</strong> shows the maps planned for the session.</li>
+          <li><strong>Match Maker line:</strong> shows the match maker rotation, with the current person highlighted.</li>
         </ol>
+        <h4>WHAT TO DO</h4>
+        <ol>
+          <li>If a matchup is showing, read the teams and play.</li>
+          <li>If there is no matchup, click <strong>CLICK TO GET STARTED</strong>.</li>
+          <li>The app will take you to the Generator tab so a matchup can be made.</li>
+        </ol>
+        <h4>BUTTONS AND FUNCTIONS</h4>
+        <p><strong>CLICK TO GET STARTED:</strong> appears only when there is no current matchup. It opens the Generator tab.</p>
+        <p><strong>Session Maps card:</strong> this is view-only on the Matchup tab. To change maps, go to the Map List tab and unlock admin mode.</p>
         <p class="helpSimpleRule">Simple rule: this tab is for viewing what everyone should play right now.</p>
       </section>
 
-      <section id="helpGenerator" class="helpSection" data-help-keywords="generator generate matchup players select match maker skill difference blitz uneven teams">
+      <section id="helpGenerator" class="helpSection" data-help-keywords="generator generate matchup players select match maker skill difference blitz uneven teams gap filter selected saved">
         <h3>GENERATOR TAB</h3>
-        <p>This is where you create balanced team options.</p>
+        <p>This tab makes balanced team options from the players you select.</p>
+        <h4>ORDER TO USE IT</h4>
         <ol>
           <li>Pick the Match Maker from the dropdown.</li>
           <li>Make sure the players who are playing are checked.</li>
           <li>Click <strong>CLICK TO GENERATE MATCHUP</strong>.</li>
-          <li>The app shows possible teams, sorted by the smallest skill difference first.</li>
+          <li>Look through the generated matchup options.</li>
           <li>Click <strong>CLICK TO SELECT</strong> on the matchup you want to use.</li>
-          <li>After saving, the app takes you back to the Matchup tab.</li>
+          <li>After it saves, the app takes you back to the Matchup tab.</li>
         </ol>
-        <p>If teams are uneven, the Blitz option can show matchups where the smaller team has more skill points.</p>
+        <h4>BUTTONS AND FUNCTIONS</h4>
+        <p><strong>Match Maker dropdown:</strong> choose who is making teams. Only players marked as Match Maker eligible appear here.</p>
+        <p><strong>Player checkboxes:</strong> check the players who are playing. Uncheck anyone who is absent.</p>
+        <p><strong>Sort by Name / Level:</strong> changes how the player checklist is sorted. It does not change player skill.</p>
+        <p><strong>CLICK TO GENERATE MATCHUP:</strong> creates the matchup options.</p>
+        <p><strong>Difference filters:</strong> show only matchups with that skill difference. Example: Difference 1 only shows matchups where the teams are 1 point apart.</p>
+        <p><strong>Blitz recommendation:</strong> appears for uneven player counts. It can show matchups where the smaller team has the higher skill total.</p>
+        <p><strong>CLICK TO SELECT:</strong> saves that matchup as the current matchup. This is the important final step.</p>
+        <p>If you generate matchups and try to leave without selecting one, the app may warn you so you do not forget.</p>
         <p class="helpSimpleRule">Simple rule: generate options, then always select the one you want.</p>
       </section>
 
       <section id="helpHistory" class="helpSection" data-help-keywords="history old matches previous match maps played edit session maps load clear matchup history admin locked unlock">
         <h3>HISTORY TAB</h3>
         <p>This tab shows old matchups that were selected.</p>
+        <h4>WHAT YOU SEE HERE</h4>
         <ol>
-          <li>By default, the app shows recent history so it loads faster.</li>
-          <li>Click a history row to open the full match card.</li>
+          <li>Date and time of the saved matchup.</li>
+          <li>MID, Match Maker, how many times that matchup was picked, and the skill difference.</li>
           <li>The match card shows both teams, skill totals, difference, and maps played for that session.</li>
-          <li>Use <strong>LOAD ALL HISTORY</strong> if you need older matches.</li>
-          <li><strong>CLEAR MATCHUP HISTORY</strong> needs admin mode. Use it only if you really want to erase history and reset the current matchup.</li>
         </ol>
+        <h4>ORDER TO USE IT</h4>
+        <ol>
+          <li>Open the History tab.</li>
+          <li>Click a history row to expand it.</li>
+          <li>Read the teams and maps played.</li>
+          <li>Click the row again to close it.</li>
+        </ol>
+        <h4>BUTTONS AND FUNCTIONS</h4>
+        <p><strong>LOAD ALL HISTORY:</strong> loads older history beyond the recent history shown first. Use this only when you need old records.</p>
+        <p><strong>CLEAR MATCHUP HISTORY:</strong> admin-only. This erases the matchup history and resets the current matchup. Be careful with it.</p>
+        <p><strong>Column headers:</strong> click headers like Date, MID, Match Maker, Times Picked, or Difference to sort the table.</p>
+        <p><strong>History row:</strong> click a row to open the full match card.</p>
         <p>The map edit controls inside an opened history card are only visible when admin mode is unlocked.</p>
-        <p>If session maps need correction, unlock admin mode, open the history card, edit the maps, then save the changes.</p>
+        <p><strong>Edit maps played:</strong> admin-only. Use this if the wrong maps were saved or if a played map needs to be added, removed, or reordered.</p>
+        <p><strong>Save map changes:</strong> admin-only. After editing maps inside a history card, save the changes before leaving.</p>
         <p class="helpSimpleRule">Simple rule: history is where you check what happened before.</p>
       </section>
 
       <section id="helpPlayers" class="helpSection" data-help-keywords="players admin skill add remove match maker checkbox save edit names">
         <h3>PLAYERS TAB</h3>
         <p>This tab is for managing players. The player list can be viewed, but changing players is protected by admin mode.</p>
+        <h4>ORDER TO USE IT</h4>
         <ol>
           <li>Unlock admin mode first.</li>
-          <li>Click <strong>ADD PLAYER</strong> to add a new player.</li>
-          <li>Edit a player name directly in the table.</li>
-          <li>Use the skill controls to adjust a player's skill number.</li>
-          <li>Use the Match Maker checkbox to choose who can appear in the Match Maker list.</li>
+          <li>Add, remove, rename, or adjust players as needed.</li>
           <li>Click <strong>SAVE</strong> when done.</li>
         </ol>
-        <p>If admin mode is locked, do not expect player changes to save.</p>
+        <h4>BUTTONS AND FUNCTIONS</h4>
+        <p><strong>ADD PLAYER:</strong> adds a blank player row.</p>
+        <p><strong>Name cell:</strong> click a player name to edit it.</p>
+        <p><strong>Skill controls:</strong> adjust a player's skill number. This affects team totals and generated matchups.</p>
+        <p><strong>Match Maker checkbox:</strong> controls whether that player can appear in the Match Maker dropdowns.</p>
+        <p><strong>REMOVE:</strong> removes that player row from the active player list.</p>
+        <p><strong>SAVE:</strong> admin-only. Saves the player list to the sheet.</p>
+        <p><strong>Changes not saved:</strong> means you edited something but have not clicked SAVE yet.</p>
+        <p>If admin mode is locked, player changes are not meant to be saved.</p>
         <p class="helpSimpleRule">Simple rule: if you change players, click SAVE before leaving.</p>
       </section>
 
       <section id="helpMapList" class="helpSection" data-help-keywords="map list maps session generate save progress skipped played bonus elimination blitz ctf custom clear copy admin locked unlock match maker">
         <h3>MAP LIST TAB</h3>
         <p>This tab controls the maps for the session.</p>
+        <h4>WHAT YOU SEE HERE</h4>
+        <ol>
+          <li><strong>Session Maps:</strong> the maps planned for this session.</li>
+          <li><strong>Complete Map List:</strong> all maps the app can use.</li>
+          <li><strong>Highlighted map:</strong> the last played map for that mode.</li>
+          <li><strong>Bonus:</strong> extra Elimination maps shown after CTF.</li>
+        </ol>
+        <h4>NORMAL SESSION ORDER</h4>
         <ol>
           <li>Unlock admin mode before changing session maps.</li>
           <li>Click <strong>GENERATE SESSION MAPS</strong> to create the next map list.</li>
-          <li>The left side shows the maps for this session.</li>
-          <li>The right side shows the complete map list.</li>
-          <li>If a map was skipped, click the <strong>X</strong> next to that map.</li>
-          <li>After the session is done, click <strong>SAVE SESSION PROGRESS</strong>.</li>
+          <li>Play the maps.</li>
+          <li>If a map was skipped, click the <strong>X</strong> next to that skipped map.</li>
+          <li>When only played maps are still showing, click <strong>SAVE SESSION PROGRESS</strong>.</li>
           <li>The app remembers what was played and brings skipped maps back later.</li>
         </ol>
-        <p><strong>Bonus</strong> is connected to Elimination. Bonus maps count as extra Elimination maps.</p>
-        <p><strong>GENERATE SESSION MAPS</strong>, <strong>SAVE SESSION PROGRESS</strong>, <strong>CLEAR SESSION MAPS</strong>, <strong>BUILD CUSTOM SESSION</strong>, and changing the Match Maker need admin mode.</p>
-        <p>Use <strong>BUILD CUSTOM SESSION</strong> if you want to pick maps yourself. Use <strong>COPY SESSION MAPS</strong> to copy the session map card as an image.</p>
+        <h4>BUTTONS AND FUNCTIONS</h4>
+        <p><strong>Match Maker dropdown:</strong> admin-only. Chooses the current session's Match Maker. This also updates the Matchup tab.</p>
+        <p><strong>X next to a map:</strong> admin-only. Removes a skipped map from the session list before saving progress.</p>
+        <p><strong>SAVE SESSION PROGRESS:</strong> admin-only. Saves the maps still showing as played, then moves the map pointer forward.</p>
+        <p><strong>GENERATE SESSION MAPS:</strong> admin-only. Creates the next map list from the saved map pointers.</p>
+        <p><strong>CLEAR SESSION MAPS:</strong> admin-only. Clears the current session maps. Use this when you need to start fresh or prepare a custom session.</p>
+        <p><strong>BUILD CUSTOM SESSION:</strong> admin-only. Lets you pick maps manually from the Complete Map List.</p>
+        <p><strong>SAVE CUSTOM SESSION:</strong> admin-only. Saves the custom maps so they appear on the Matchup tab.</p>
+        <p><strong>EXIT CUSTOM SESSION:</strong> admin-only. Leaves custom session mode and returns to the normal generated session setup.</p>
+        <p><strong>COPY SESSION MAPS:</strong> copies the session map card as an image so it can be pasted somewhere else.</p>
+        <p><strong>Bonus maps:</strong> Bonus is connected to Elimination. If Bonus maps are played, they count toward Elimination progress.</p>
         <p class="helpSimpleRule">Simple rule: before saving progress, only maps that were played should still be showing.</p>
       </section>
 
