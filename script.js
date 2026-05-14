@@ -329,6 +329,10 @@ function setupHelpGuide(){
 
   if(!sectionWrap || sections.length === 0) return;
 
+  sections.forEach(section => {
+    section.dataset.originalHtml = section.innerHTML;
+  });
+
   let noResults = document.getElementById("helpNoResults");
 
   if(!noResults){
@@ -351,18 +355,72 @@ function setupHelpGuide(){
     };
   });
 
+  function escapeRegExp(value){
+    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  function highlightHelpTerm(section, term){
+    section.innerHTML = section.dataset.originalHtml || section.innerHTML;
+
+    if(!term) return;
+
+    const regex = new RegExp(`(${escapeRegExp(term)})`, "gi");
+    const walker = document.createTreeWalker(
+      section,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node){
+          if(!node.nodeValue || !regex.test(node.nodeValue)){
+            regex.lastIndex = 0;
+            return NodeFilter.FILTER_REJECT;
+          }
+
+          regex.lastIndex = 0;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+
+    const textNodes = [];
+
+    while(walker.nextNode()){
+      textNodes.push(walker.currentNode);
+    }
+
+    textNodes.forEach(node => {
+      const fragment = document.createDocumentFragment();
+      const parts = node.nodeValue.split(regex);
+
+      parts.forEach(part => {
+        if(part.toLowerCase() === term.toLowerCase()){
+          const mark = document.createElement("mark");
+          mark.className = "helpSearchHighlight";
+          mark.textContent = part;
+          fragment.appendChild(mark);
+        }else{
+          fragment.appendChild(document.createTextNode(part));
+        }
+      });
+
+      node.parentNode.replaceChild(fragment, node);
+    });
+  }
+
   function renderHelpGuide(rawTerm){
-    const term = rawTerm.trim().toLowerCase();
+    const term = rawTerm.trim();
+    const normalizedTerm = term.toLowerCase();
     let visibleCount = 0;
     let firstMatchId = "";
 
     sections.forEach(section => {
+      highlightHelpTerm(section, term);
+
       const haystack = [
         section.innerText,
         section.dataset.helpKeywords || ""
       ].join(" ").toLowerCase();
 
-      const isMatch = !term || haystack.includes(term);
+      const isMatch = !normalizedTerm || haystack.includes(normalizedTerm);
       const isActive = section.id === activeHelpTarget;
       const shouldShow = term ? isMatch : isActive;
 
@@ -382,7 +440,7 @@ function setupHelpGuide(){
       const haystack = target
         ? [target.innerText, target.dataset.helpKeywords || ""].join(" ").toLowerCase()
         : "";
-      const isMatch = !term || haystack.includes(term);
+      const isMatch = !normalizedTerm || haystack.includes(normalizedTerm);
 
       btn.classList.toggle("hidden", !isMatch);
       btn.classList.toggle("active", !term && btn.dataset.helpTarget === activeHelpTarget);
