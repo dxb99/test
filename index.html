@@ -378,21 +378,27 @@ CLICK TO GENERATE MATCHUP
       <p>Pick a topic below, or search for a word like maps, history, save, admin, or matchup.</p>
     </div>
 
-    <div class="helpSearchCard">
-      <input id="helpSearchInput" class="helpSearchInput" type="search" placeholder="Search the guide..." autocomplete="off">
-      <div id="helpSearchCount" class="helpSearchCount">Showing all guide sections</div>
-    </div>
+    <div class="helpGuideLayout">
 
-    <div class="helpTopicGrid">
-      <button class="helpTopicBtn" data-help-target="helpMatchup">MATCHUP</button>
-      <button class="helpTopicBtn" data-help-target="helpGenerator">GENERATOR</button>
-      <button class="helpTopicBtn" data-help-target="helpHistory">HISTORY</button>
-      <button class="helpTopicBtn" data-help-target="helpPlayers">PLAYERS</button>
-      <button class="helpTopicBtn" data-help-target="helpMapList">MAP LIST</button>
-      <button class="helpTopicBtn" data-help-target="helpHelp">HELP</button>
-    </div>
+      <aside class="helpGuideMenu">
 
-    <div class="helpSections">
+        <div class="helpSearchCard">
+          <input id="helpSearchInput" class="helpSearchInput" type="search" placeholder="Search the guide..." autocomplete="off">
+          <div id="helpSearchCount" class="helpSearchCount">Select a guide topic</div>
+        </div>
+
+        <div class="helpTopicGrid">
+          <button class="helpTopicBtn active" data-help-target="helpMatchup">MATCHUP</button>
+          <button class="helpTopicBtn" data-help-target="helpGenerator">GENERATOR</button>
+          <button class="helpTopicBtn" data-help-target="helpHistory">HISTORY</button>
+          <button class="helpTopicBtn" data-help-target="helpPlayers">PLAYERS</button>
+          <button class="helpTopicBtn" data-help-target="helpMapList">MAP LIST</button>
+          <button class="helpTopicBtn" data-help-target="helpHelp">HELP</button>
+        </div>
+
+      </aside>
+
+      <div class="helpSections">
 
       <section id="helpMatchup" class="helpSection" data-help-keywords="matchup current match teams red blue timer match maker session maps">
         <h3>MATCHUP TAB</h3>
@@ -476,6 +482,8 @@ CLICK TO GENERATE MATCHUP
         </ol>
         <p class="helpSimpleRule">Simple rule: come here when you forget what a button does.</p>
       </section>
+
+      </div>
 
     </div>
 
