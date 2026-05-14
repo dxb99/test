@@ -422,7 +422,7 @@ CLICK TO GENERATE MATCHUP
         <p class="helpSimpleRule">Simple rule: generate options, then always select the one you want.</p>
       </section>
 
-      <section id="helpHistory" class="helpSection" data-help-keywords="history old matches previous match maps played edit session maps load clear matchup history">
+      <section id="helpHistory" class="helpSection" data-help-keywords="history old matches previous match maps played edit session maps load clear matchup history admin locked unlock">
         <h3>HISTORY TAB</h3>
         <p>This tab shows old matchups that were selected.</p>
         <ol>
@@ -430,15 +430,16 @@ CLICK TO GENERATE MATCHUP
           <li>Click a history row to open the full match card.</li>
           <li>The match card shows both teams, skill totals, difference, and maps played for that session.</li>
           <li>Use <strong>LOAD ALL HISTORY</strong> if you need older matches.</li>
-          <li>Use <strong>CLEAR MATCHUP HISTORY</strong> only if you really want to erase history and reset the current matchup.</li>
+          <li><strong>CLEAR MATCHUP HISTORY</strong> needs admin mode. Use it only if you really want to erase history and reset the current matchup.</li>
         </ol>
-        <p>If session maps need correction, use the edit map controls inside the opened history card, then save the changes.</p>
+        <p>The map edit controls inside an opened history card are only visible when admin mode is unlocked.</p>
+        <p>If session maps need correction, unlock admin mode, open the history card, edit the maps, then save the changes.</p>
         <p class="helpSimpleRule">Simple rule: history is where you check what happened before.</p>
       </section>
 
       <section id="helpPlayers" class="helpSection" data-help-keywords="players admin skill add remove match maker checkbox save edit names">
         <h3>PLAYERS TAB</h3>
-        <p>This tab is for managing players. It is protected by admin mode.</p>
+        <p>This tab is for managing players. The player list can be viewed, but changing players is protected by admin mode.</p>
         <ol>
           <li>Unlock admin mode first.</li>
           <li>Click <strong>ADD PLAYER</strong> to add a new player.</li>
@@ -447,13 +448,15 @@ CLICK TO GENERATE MATCHUP
           <li>Use the Match Maker checkbox to choose who can appear in the Match Maker list.</li>
           <li>Click <strong>SAVE</strong> when done.</li>
         </ol>
+        <p>If admin mode is locked, do not expect player changes to save.</p>
         <p class="helpSimpleRule">Simple rule: if you change players, click SAVE before leaving.</p>
       </section>
 
-      <section id="helpMapList" class="helpSection" data-help-keywords="map list maps session generate save progress skipped played bonus elimination blitz ctf custom clear copy">
+      <section id="helpMapList" class="helpSection" data-help-keywords="map list maps session generate save progress skipped played bonus elimination blitz ctf custom clear copy admin locked unlock match maker">
         <h3>MAP LIST TAB</h3>
         <p>This tab controls the maps for the session.</p>
         <ol>
+          <li>Unlock admin mode before changing session maps.</li>
           <li>Click <strong>GENERATE SESSION MAPS</strong> to create the next map list.</li>
           <li>The left side shows the maps for this session.</li>
           <li>The right side shows the complete map list.</li>
@@ -462,6 +465,7 @@ CLICK TO GENERATE MATCHUP
           <li>The app remembers what was played and brings skipped maps back later.</li>
         </ol>
         <p><strong>Bonus</strong> is connected to Elimination. Bonus maps count as extra Elimination maps.</p>
+        <p><strong>GENERATE SESSION MAPS</strong>, <strong>SAVE SESSION PROGRESS</strong>, <strong>CLEAR SESSION MAPS</strong>, <strong>BUILD CUSTOM SESSION</strong>, and changing the Match Maker need admin mode.</p>
         <p>Use <strong>BUILD CUSTOM SESSION</strong> if you want to pick maps yourself. Use <strong>COPY SESSION MAPS</strong> to copy the session map card as an image.</p>
         <p class="helpSimpleRule">Simple rule: before saving progress, only maps that were played should still be showing.</p>
       </section>
