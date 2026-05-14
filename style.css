@@ -1699,6 +1699,14 @@ body.admin-locked .editHistoryMapsBtn{
   display:none;
 }
 
+.helpSearchHighlight{
+  padding:1px 3px;
+  border-radius:4px;
+  background:#facc15;
+  color:#111827;
+  font-weight:900;
+}
+
 /* HISTORY */
 
 .historyControls{
