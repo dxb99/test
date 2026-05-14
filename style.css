@@ -1657,6 +1657,14 @@ body.admin-locked .editHistoryMapsBtn{
   letter-spacing:1px;
 }
 
+.helpSection h4{
+  margin:18px 0 8px 0;
+  color:#93c5fd;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
 .helpSection p{
   margin:0 0 12px 0;
   color:#e5e7eb;
@@ -3635,6 +3643,10 @@ body{
 
   .helpSection h3{
     font-size:18px;
+  }
+
+  .helpSection h4{
+    font-size:12px;
   }
 
   .helpSection p,
