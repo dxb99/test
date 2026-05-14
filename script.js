@@ -335,7 +335,7 @@ function setupHelpGuide(){
     noResults = document.createElement("div");
     noResults.id = "helpNoResults";
     noResults.className = "helpNoResults hidden";
-    noResults.textContent = "No guide sections found. Try a simpler word.";
+    noResults.textContent = "No help topics found. Try a simpler word.";
     sectionWrap.appendChild(noResults);
   }
 
@@ -392,8 +392,8 @@ function setupHelpGuide(){
 
     if(countEl){
       countEl.textContent = term
-        ? `${visibleCount} guide ${visibleCount === 1 ? "section" : "sections"} found`
-        : "Select a guide topic";
+        ? `${visibleCount} help ${visibleCount === 1 ? "topic" : "topics"} found`
+        : "Select a help topic";
     }
 
     if(term && firstMatchId){
