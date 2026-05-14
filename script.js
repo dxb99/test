@@ -3977,16 +3977,25 @@ function processMode(mode, sessionId, masterId){
   if(!sessionContainer || !masterContainer) return;
 
   // 🔥 get session maps
-const sessionMaps = Array.from(
-  sessionContainer.querySelectorAll(".mapSessionName")
-).map(el => el.innerText.trim());
+const sessionContainers = [sessionContainer];
+
+if(mode === "elimination"){
+  const bonusContainer = document.getElementById("bonusSessionList");
+
+  if(bonusContainer){
+    sessionContainers.push(bonusContainer);
+  }
+}
+
+const sessionMaps = sessionContainers.flatMap(container =>
+  Array.from(container.querySelectorAll(".mapSessionName"))
+    .map(el => el.innerText.trim())
+);
 
 /* 🔥 ALWAYS CLEAR OLD HIGHLIGHTS FIRST */
 masterContainer.querySelectorAll(".mapMasterRow").forEach(row=>{
   row.classList.remove("lastPlayedMap");
 });
-
-if(sessionMaps.length === 0) return;
 
 const savedLastPlayedMap = !customSessionActive && currentSessionLastPlayed
   ? currentSessionLastPlayed[mode]
