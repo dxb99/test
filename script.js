@@ -325,6 +325,7 @@ function setupHelpGuide(){
   const sections = Array.from(document.querySelectorAll(".helpSection"));
   const topicButtons = Array.from(document.querySelectorAll(".helpTopicBtn"));
   const sectionWrap = document.querySelector(".helpSections");
+  let activeHelpTarget = topicButtons[0] ? topicButtons[0].dataset.helpTarget : "";
 
   if(!sectionWrap || sections.length === 0) return;
 
@@ -340,25 +341,20 @@ function setupHelpGuide(){
 
   topicButtons.forEach(btn => {
     btn.onclick = () => {
-      const target = document.getElementById(btn.dataset.helpTarget);
+      activeHelpTarget = btn.dataset.helpTarget;
 
       if(searchInput){
         searchInput.value = "";
-        filterHelpGuide("");
       }
 
-      if(target){
-        target.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-      }
+      renderHelpGuide("");
     };
   });
 
-  function filterHelpGuide(rawTerm){
+  function renderHelpGuide(rawTerm){
     const term = rawTerm.trim().toLowerCase();
     let visibleCount = 0;
+    let firstMatchId = "";
 
     sections.forEach(section => {
       const haystack = [
@@ -367,26 +363,49 @@ function setupHelpGuide(){
       ].join(" ").toLowerCase();
 
       const isMatch = !term || haystack.includes(term);
+      const isActive = section.id === activeHelpTarget;
+      const shouldShow = term ? isMatch : isActive;
 
-      section.classList.toggle("hidden", !isMatch);
+      section.classList.toggle("hidden", !shouldShow);
 
       if(isMatch){
         visibleCount++;
+
+        if(!firstMatchId){
+          firstMatchId = section.id;
+        }
       }
     });
 
-    noResults.classList.toggle("hidden", visibleCount !== 0);
+    topicButtons.forEach(btn => {
+      const target = document.getElementById(btn.dataset.helpTarget);
+      const haystack = target
+        ? [target.innerText, target.dataset.helpKeywords || ""].join(" ").toLowerCase()
+        : "";
+      const isMatch = !term || haystack.includes(term);
+
+      btn.classList.toggle("hidden", !isMatch);
+      btn.classList.toggle("active", !term && btn.dataset.helpTarget === activeHelpTarget);
+    });
+
+    noResults.classList.toggle("hidden", !term || visibleCount !== 0);
 
     if(countEl){
       countEl.textContent = term
         ? `${visibleCount} guide ${visibleCount === 1 ? "section" : "sections"} found`
-        : "Showing all guide sections";
+        : "Select a guide topic";
+    }
+
+    if(term && firstMatchId){
+      activeHelpTarget = firstMatchId;
     }
   }
 
   if(searchInput){
-    searchInput.oninput = () => filterHelpGuide(searchInput.value);
+    searchInput.oninput = () => renderHelpGuide(searchInput.value);
   }
+
+  renderHelpGuide("");
 
 }
 
