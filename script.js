@@ -318,6 +318,78 @@ function isAdminUnlocked(){
   return !!sessionStorage.getItem("adminPass");
 }
 
+function setupHelpGuide(){
+
+  const searchInput = document.getElementById("helpSearchInput");
+  const countEl = document.getElementById("helpSearchCount");
+  const sections = Array.from(document.querySelectorAll(".helpSection"));
+  const topicButtons = Array.from(document.querySelectorAll(".helpTopicBtn"));
+  const sectionWrap = document.querySelector(".helpSections");
+
+  if(!sectionWrap || sections.length === 0) return;
+
+  let noResults = document.getElementById("helpNoResults");
+
+  if(!noResults){
+    noResults = document.createElement("div");
+    noResults.id = "helpNoResults";
+    noResults.className = "helpNoResults hidden";
+    noResults.textContent = "No guide sections found. Try a simpler word.";
+    sectionWrap.appendChild(noResults);
+  }
+
+  topicButtons.forEach(btn => {
+    btn.onclick = () => {
+      const target = document.getElementById(btn.dataset.helpTarget);
+
+      if(searchInput){
+        searchInput.value = "";
+        filterHelpGuide("");
+      }
+
+      if(target){
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+    };
+  });
+
+  function filterHelpGuide(rawTerm){
+    const term = rawTerm.trim().toLowerCase();
+    let visibleCount = 0;
+
+    sections.forEach(section => {
+      const haystack = [
+        section.innerText,
+        section.dataset.helpKeywords || ""
+      ].join(" ").toLowerCase();
+
+      const isMatch = !term || haystack.includes(term);
+
+      section.classList.toggle("hidden", !isMatch);
+
+      if(isMatch){
+        visibleCount++;
+      }
+    });
+
+    noResults.classList.toggle("hidden", visibleCount !== 0);
+
+    if(countEl){
+      countEl.textContent = term
+        ? `${visibleCount} guide ${visibleCount === 1 ? "section" : "sections"} found`
+        : "Showing all guide sections";
+    }
+  }
+
+  if(searchInput){
+    searchInput.oninput = () => filterHelpGuide(searchInput.value);
+  }
+
+}
+
 window.addEventListener("load", async () => {
 
 sessionStorage.removeItem("selectedGeneratorMatchMaker");
@@ -327,6 +399,7 @@ sessionStorage.removeItem("adminPass");
   try {
 
     await loadInitialData();
+    setupHelpGuide();
 
 /* 🔥 HIDE BLITZ ON LOAD */
 
